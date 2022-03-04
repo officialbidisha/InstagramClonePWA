@@ -9,6 +9,7 @@ self.addEventListener('install', function (event) {
                             cache.addAll([
                                    '/',
                                    '/index.html',
+                                   '/offline.html',
                                    '/src/js/app.js',
                                    '/src/js/feed.js',
                                    '/src/js/promise.js',
@@ -64,8 +65,14 @@ self.addEventListener('fetch', function (event) {
                                                                return res;
                                                         })
                                           })
+                                          /**
+                                           * Handling error fallback 
+                                           */
                                           .catch((err)=>{
-
+                                                 return caches.open('static-v2')
+                                                 .then(function(cache){
+                                                        return cache.match("/offline.html")
+                                                 })
                                           })
                             }
                      })
