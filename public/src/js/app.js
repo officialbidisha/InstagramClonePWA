@@ -7,7 +7,7 @@ if(!window.Promise){
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
         .register(
-            "./../../sw.js"
+            "/sw.js"
         )
         .then(() => {
             console.log('Service worker registered');
