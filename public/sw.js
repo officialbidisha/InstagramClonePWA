@@ -60,7 +60,7 @@ self.addEventListener('fetch', function (event) {
                                                                 * and do not send any http request
                                                                 * unlike add
                                                                 */
-                                                               cache.put(event.request.url, res.clone())
+                                                                cache.put(event.request.url, res.clone())
                                                                return res;
                                                         })
                                           })
