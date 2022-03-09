@@ -93,3 +93,29 @@ self.addEventListener('fetch', function (event) {
 //                 } )
 //          )
 // })
+
+/**
+ * Network first and then cache strategy
+ */
+// self.addEventListener('fetch', function(event){
+//       event.respondWith(
+//              fetch(event.request)
+//              .catch(function(err){
+//                       return caches.match(event.request);
+//              })
+//       )
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
