@@ -8,7 +8,7 @@ function openCreatePostModal() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
 
-    deferredPrompt.userChoice.then(function(choiceResult) {
+    deferredPrompt.userChoice.then(function (choiceResult) {
       console.log(choiceResult.outcome);
 
       if (choiceResult.outcome === 'dismissed') {
@@ -34,7 +34,7 @@ function onSaveButtonClicked(event) {
   console.log('clicked');
   if ('caches' in window) {
     caches.open('user-requested')
-      .then(function(cache) {
+      .then(function (cache) {
         cache.add('https://httpbin.org/get');
         cache.add('/src/images/sf-boat.jpg');
       });
@@ -65,15 +65,48 @@ function createCard() {
   cardWrapper.appendChild(cardSupportingText);
   componentHandler.upgradeElement(cardWrapper);
   sharedMomentsArea.appendChild(cardWrapper);
-  sharedMomentsArea.style.display="flex";
-  sharedMomentsArea.style.justifyContent= "center";
+  sharedMomentsArea.style.display = "flex";
+  sharedMomentsArea.style.justifyContent = "center";
   sharedMomentsArea.style.paddingBottom = "20px";
 }
 
-fetch('https://httpbin.org/get')
-  .then(function(res) {
+
+/**
+ * Helper function
+ */
+function clearCards() {
+  while (sharedMomentsArea.hasChildNodes()) {
+    sharedMomentsArea.removeChild(sharedMomentsArea.lastChild);
+  }
+}
+
+
+/**
+ * Cache and then network
+ */
+let url = 'https://httpbin.org/get';
+let networkDataReceived = false;
+fetch(url)
+  .then(function (res) {
     return res.json();
   })
-  .then(function(data) {
+  .then(function (data) {
+    networkDataReceived = true;
+    clearCards();
     createCard();
   });
+
+if('caches' in window){
+    caches.match(url)
+    .then(function(response){
+        if(response){
+            return response.json()
+        }
+    })
+    .then(function(data){
+        if(!networkDataReceived){
+             clearCards();
+             createCard();
+        }
+    })
+}
